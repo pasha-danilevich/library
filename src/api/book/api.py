@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class BookList(ListModelMixin, GenericAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = Book.objects.all()
+    queryset = Book.objects.all().order_by('title')
     serializer_class = BookSerializer
 
     def get(self, request, *args, **kwargs):
