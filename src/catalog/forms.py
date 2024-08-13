@@ -12,5 +12,6 @@ class BookForm(forms.ModelForm):
         self.fields['genre'].queryset = Genre.objects.all()
         
 
-
+class BorrowBookForm(forms.Form):
+    borrow_date = forms.DateField(label='Дата займа')
 

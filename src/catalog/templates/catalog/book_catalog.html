@@ -7,14 +7,15 @@
    
   {% if books %}
     <ul class="list-group">
-      {% for book in books %}
+        {% for book in books %}
         <li class="list-group-item">
-          <strong>Книга:</strong> {{ book.title }} 
-          <button class="btn btn-outline-secondary btn-sm copy-button" data-title="{{ book.title }}">Копировать</button><br>
-          <strong>Автор:</strong> {{ book.author }}<br>
-          <strong>Жанр:</strong> {{ book.genre }}
+            <strong>Книга:</strong> {{ book.title }} 
+            <button class="btn btn-outline-secondary btn-sm copy-button" data-title="{{ book.title }}">Копировать</button><br>
+            <strong>Автор:</strong> {{ book.author }}<br>
+            <strong>Жанр:</strong> {{ book.genre }}
+            <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-sm">Взять книгу</a>
         </li>
-      {% endfor %}
+        {% endfor %}
     </ul>
   {% else %}
     <div class="alert alert-warning">{{ message }}</div>

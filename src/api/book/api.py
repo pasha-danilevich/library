@@ -28,3 +28,19 @@ class MyBookList(ListModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
+class MyBookCreate(ListModelMixin, GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = BorrowedBook.objects.all()
+    serializer_class = BorrowedBookSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+
+        if user:
+            queryset = self.queryset.filter(reader=user.id)
+            return queryset
+        return []
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
