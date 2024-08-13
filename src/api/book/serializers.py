@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from auth_app.models import Reader
 from catalog.models import Author, BorrowedBook, Genre, Book
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -26,3 +27,18 @@ class BorrowedBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = BorrowedBook
         fields = ['book', 'borrow_date']
+        
+
+class ReaderSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Reader
+        fields = ['first_name', 'last_name', 'address']
+
+class DebtorSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
+    reader = ReaderSerializer()
+    
+    class Meta:
+        model = BorrowedBook
+        fields = ['reader', 'book', 'borrow_date']

@@ -2,7 +2,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 from auth_app.utils import get_access_token, get_user_from_token
 from catalog.models import Book, BorrowedBook
-from .serializers import BookSerializer, BorrowedBookSerializer
+from .serializers import BookSerializer, BorrowedBookSerializer, DebtorSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class BookList(ListModelMixin, GenericAPIView):
@@ -44,3 +44,10 @@ class MyBookCreate(ListModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+    
+
+class DebtorList(MyBookCreate):
+    serializer_class = DebtorSerializer
+    
+    def get_queryset(self):
+        return self.queryset.all()

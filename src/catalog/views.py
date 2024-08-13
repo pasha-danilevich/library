@@ -74,6 +74,7 @@ class MyBookCatalogView(BaseView):
 
         if response.status_code == 200:
             books = response.json()
+            print(books)
             books_with_days = self.calculate_days_on_hand(books)             
             print(books_with_days)
             return render(
@@ -86,19 +87,27 @@ class MyBookCatalogView(BaseView):
             return render(request, 'catalog/book_catalog.html', {'message': 'Вы не зарегестрированы', 'user': user})
 
 
-class DebtorsView(BaseView):
+class DebtorsView(MyBookCatalogView):
+    
 
     def get(self, request):
         access_token = get_access_token(self.request)
         user = get_user_from_token(access_token)
 
         response = self.get_response(
-            url='http://localhost:8000/api/books/',
+            url='http://localhost:8000/api/books/debtors/',
             access_token=access_token
         )
-        debtors = response.json()
-        return render(request, 'catalog/debtors_list.html', {'debtors': debtors, 'user': user})
+        data = response.json()
 
+         
+        context = {'debtors': data, 'user': user}
+        print(context)
+        return render(
+            request, 
+            'catalog/debtors_list.html', 
+            context=context
+        )
 
 def borrow_book(request, book_id):
     book = Book.objects.get(id=book_id)

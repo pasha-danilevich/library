@@ -8,8 +8,15 @@
   
   {% if debtors %}
     <ul class="list-group">
-      {% for book in debtors %}
-        <li class="list-group-item">{{ book.title }} - {{ book.reader }}</li>
+      {% for item in debtors %}
+        <li class="list-group-item">
+          <strong>Книга:</strong> {{ item.book.title }}<br>
+          <strong>Автор:</strong> {{ item.book.author }}<br>
+          <strong>Жанр:</strong> {{ item.book.genre }}<br>
+          <strong>Читатель:</strong> {{ item.reader.first_name }} {{ item.reader.last_name }}<br>
+          <strong>Адрес:</strong> {{ item.reader.address }}<br>
+          <strong>Дата займа:</strong> {{ item.borrow_date }}<br>
+        </li>
       {% endfor %}
     </ul>
   {% else %}

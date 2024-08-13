@@ -13,7 +13,12 @@
             <button class="btn btn-outline-secondary btn-sm copy-button" data-title="{{ book.title }}">Копировать</button><br>
             <strong>Автор:</strong> {{ book.author }}<br>
             <strong>Жанр:</strong> {{ book.genre }}
-            <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-sm">Взять книгу</a>
+            {% if user.librarian.employee_number %}
+                <a href="{% url 'debtors_list' %}" class="btn btn-secondary btn-sm">Список должников</a>
+            {% else %}
+                <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-sm">Взять книгу</a>
+            {% endif %}
+            
         </li>
         {% endfor %}
     </ul>
