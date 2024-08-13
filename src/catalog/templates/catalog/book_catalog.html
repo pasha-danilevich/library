@@ -4,14 +4,15 @@
 
 {% block content %}
   <h1>Каталог книг</h1>
-  
+   
   {% if books %}
     <ul class="list-group">
       {% for book in books %}
         <li class="list-group-item">
-            <strong>Книга:</strong> {{ book.title }}<br>
-            <strong>Автор:</strong> {{ book.author }}<br>
-            <strong>Жанр:</strong> {{ book.genre }}
+          <strong>Книга:</strong> {{ book.title }} 
+          <button class="btn btn-outline-secondary btn-sm copy-button" data-title="{{ book.title }}">Копировать</button><br>
+          <strong>Автор:</strong> {{ book.author }}<br>
+          <strong>Жанр:</strong> {{ book.genre }}
         </li>
       {% endfor %}
     </ul>
