@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from catalog.models import Author, Genre, Book
+from catalog.models import Author, BorrowedBook, Genre, Book
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,11 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['id', 'title', 'author', 'genre']
+        
+        
+class BorrowedBookSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
+    
+    class Meta:
+        model = BorrowedBook
+        fields = ['book', 'borrow_date']

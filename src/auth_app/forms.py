@@ -13,7 +13,13 @@ class ReaderRegistrationForm(forms.ModelForm):
     class Meta:
         model = Reader
         fields = ['address']
-        
+
+
+class LibrarianRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Librarian
+        fields = ['employee_number']
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)

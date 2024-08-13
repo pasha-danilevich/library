@@ -1,0 +1,18 @@
+{# catalog/debtors_list.html #}
+{% extends 'auth_app/base.html' %}
+
+{% block title %}Список должников{% endblock %}
+
+{% block content %}
+  <h1>Список должников</h1>
+  
+  {% if debtors %}
+    <ul class="list-group">
+      {% for book in debtors %}
+        <li class="list-group-item">{{ book.title }} - {{ book.reader }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Нет должников.</p>
+  {% endif %}
+{% endblock %}

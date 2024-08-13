@@ -11,7 +11,6 @@ def get_access_token(request):
 def get_user_from_token(access_token):
     if not access_token:
         return None
-
     try:
         # Декодируем токен
         token_payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256'])
@@ -21,4 +20,4 @@ def get_user_from_token(access_token):
         user = User.objects.get(id=user_id)
         return user
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, User.DoesNotExist):
-        raise AuthenticationFailed('Invalid token or user does not exist.')
+        return None

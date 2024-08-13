@@ -138,8 +138,8 @@ REST_FRAMEWORK = {
 
 # Настройки для SIMPLE_JWT
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Время жизни access токена
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Время жизни refresh токена
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Время жизни access токена
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Время жизни refresh токена
     'ROTATE_REFRESH_TOKENS': True,                   # Обновление refresh токенов
     "BLACKLIST_AFTER_ROTATION": False,
     'AUTH_HEADER_TYPES': ('JWT', 'Bearer'),

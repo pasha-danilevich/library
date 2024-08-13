@@ -4,10 +4,13 @@
 
 {% block content %}
   <h1>Регистрация</h1>
+  
   <form method="post">
     {% csrf_token %}
     {{ user_form.as_p }}
     {{ reader_form.as_p }}
-    <button type="submit">Зарегистрироваться</button>
+    
+    <button type="submit" class="btn btn-primary">Зарегистрироваться как читатель</button>
+    <a href="{% url 'register_librarian' %}" class="btn btn-secondary">Зарегистрироваться как библиотекарь</a>
   </form>
 {% endblock %}

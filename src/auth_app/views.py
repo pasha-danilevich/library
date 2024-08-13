@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegistrationForm, ReaderRegistrationForm
+from .forms import UserRegistrationForm, ReaderRegistrationForm, LoginForm
 from django.contrib.auth import logout
+import requests
 
 def register(request):
     if request.method == 'POST':
@@ -25,9 +26,30 @@ def register(request):
     
     return render(request, 'auth_app/register.html', {'user_form': user_form, 'reader_form': reader_form})
 
-import requests
+from django.shortcuts import render, redirect
+from .forms import UserRegistrationForm, LibrarianRegistrationForm
 
-from .forms import UserRegistrationForm, ReaderRegistrationForm, LoginForm
+def register_librarian(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        librarian_form = LibrarianRegistrationForm(request.POST)
+        if user_form.is_valid() and librarian_form.is_valid():
+            # Создание пользователя
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data['password'])
+            new_user.save()
+            
+            # Создание библиотекаря
+            new_librarian = librarian_form.save(commit=False)
+            new_librarian.user = new_user
+            new_librarian.save()
+            
+            return redirect('login')
+    else:
+        user_form = UserRegistrationForm()
+        librarian_form = LibrarianRegistrationForm()
+    
+    return render(request, 'auth_app/register_librarian.html', {'user_form': user_form, 'librarian_form': librarian_form})
 
 def login(request):
     if request.method == 'POST':
@@ -54,8 +76,6 @@ def login(request):
         form = LoginForm()
     
     return render(request, 'auth_app/login.html', {'form': form})
-
-
 
 
 class LogoutView(View):
