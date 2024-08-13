@@ -9,7 +9,9 @@
     <ul class="list-group">
       {% for book in books %}
         <li class="list-group-item">
-          <strong>{{ book.title }}</strong> - {{ book.author }} ({{ book.genre }})
+            <strong>Книга:</strong> {{ book.title }}<br>
+            <strong>Автор:</strong> {{ book.author }}<br>
+            <strong>Жанр:</strong> {{ book.genre }}
         </li>
       {% endfor %}
     </ul>
