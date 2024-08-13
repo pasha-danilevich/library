@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
+from django.views import View
 from .forms import UserRegistrationForm, ReaderRegistrationForm
+from django.contrib.auth import logout
 
 def register(request):
     if request.method == 'POST':
@@ -52,3 +54,11 @@ def login(request):
         form = LoginForm()
     
     return render(request, 'auth_app/login.html', {'form': form})
+
+
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
