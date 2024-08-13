@@ -1,3 +1,4 @@
+from datetime import date
 import requests
 from django.views import View
 from django.shortcuts import render, redirect
@@ -36,6 +37,31 @@ class BookCatalogView(BaseView):
 
 
 class MyBookCatalogView(BaseView):
+    
+
+    def calculate_days_on_hand(self, books):
+        today = date.today()
+        books_with_days = []
+
+        for item in books:
+            borrow_date_str = item.get('borrow_date', '')
+            if borrow_date_str:
+                borrow_date = date.fromisoformat(borrow_date_str)
+            else:
+                borrow_date = None
+
+            if borrow_date:
+                days_on_hand = (today - borrow_date).days  
+            else:
+                days_on_hand = 0
+
+            books_with_days.append({
+                'book': item.get('book'),
+                'borrow_date': borrow_date,
+                'days_on_hand': days_on_hand
+            })
+        
+        return books_with_days
 
     def get(self, request):
         access_token = get_access_token(request)
@@ -48,8 +74,14 @@ class MyBookCatalogView(BaseView):
 
         if response.status_code == 200:
             books = response.json()
-            print(books)
-            return render(request, 'catalog/my_books.html', {'books': books, 'user': user})
+            books_with_days = self.calculate_days_on_hand(books)             
+            print(books_with_days)
+            return render(
+                request, 
+                'catalog/my_books.html', 
+                {'books_with_days': books_with_days, 'user': user}
+            )
+        
         elif response.status_code == 401:
             return render(request, 'catalog/book_catalog.html', {'message': 'Вы не зарегестрированы', 'user': user})
 

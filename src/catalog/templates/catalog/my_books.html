@@ -5,15 +5,18 @@
 {% block content %}
   <h1>Мои книги</h1>
   
-  {% if books %}
-    <ul class="list-group">
-        {% for item in books %}
-            <li class="list-group-item">
-                {{ item.book.title }} - {{ item.book.author }} (Жанр: {{ item.book.genre }}, Дата займа: {{ item.borrow_date }})
-                <a href="{% url 'return_book' item.book.id %}" class="btn btn-danger btn-sm">Вернуть книгу</a>
-            </li>
-        {% endfor %}
-    </ul>
+  {% if books_with_days %}
+  <ul class="list-group">
+    {% for item in books_with_days %}
+        <li class="list-group-item">
+            <strong>Книга:</strong> {{ item.book.title }}<br>
+            <strong>Дата займа:</strong> {{ item.borrow_date }}<br>
+            <strong>Количество дней на руках:</strong> {{ item.days_on_hand }} 
+            <br>
+            <a href="{% url 'return_book' item.book.id %}" class="btn btn-danger btn-sm">Вернуть книгу</a>
+        </li>
+    {% endfor %}
+</ul>
   {% else %}
     <p>У вас нет взятых книг.</p>
   {% endif %}
