@@ -10,6 +10,7 @@
         {% for item in books %}
             <li class="list-group-item">
                 {{ item.book.title }} - {{ item.book.author }} (Жанр: {{ item.book.genre }}, Дата займа: {{ item.borrow_date }})
+                <a href="{% url 'return_book' item.book.id %}" class="btn btn-danger btn-sm">Вернуть книгу</a>
             </li>
         {% endfor %}
     </ul>

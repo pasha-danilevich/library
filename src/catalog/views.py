@@ -80,3 +80,12 @@ def borrow_book(request, book_id):
     )
 
     return redirect('my_books')
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Book
+
+def return_book(request, book_id):
+    borrowed_book = get_object_or_404(BorrowedBook, book_id=book_id)
+    borrowed_book.delete()
+    
+    return redirect('my_books')
