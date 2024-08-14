@@ -20,9 +20,8 @@ class MyBookList(ListModelMixin, GenericAPIView):
     
     def get_queryset(self):
         user = self.request.user
-
         if user:
-            queryset = self.queryset.filter(reader=user.id)
+            queryset = self.queryset.filter(reader=user.reader.id)
             return queryset
         return []
 

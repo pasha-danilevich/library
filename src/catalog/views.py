@@ -114,7 +114,7 @@ def borrow_book(request, book_id):
 
     access_token = get_access_token(request)
     user = get_user_from_token(access_token)
-
+    print(user.reader.id, 'borrow_book1111111111111111111')
     borrowed_book = BorrowedBook.objects.create(
         reader=user.reader,
         book=book
@@ -126,7 +126,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Book
 
 def return_book(request, book_id):
-    borrowed_book = get_object_or_404(BorrowedBook, book_id=book_id)
+    access_token = get_access_token(request)
+    user = get_user_from_token(access_token)
+    
+    borrowed_book = BorrowedBook.objects.filter(
+        book_id=book_id, 
+        reader=user.reader.id
+    )
+    
     borrowed_book.delete()
     
     return redirect('my_books')
