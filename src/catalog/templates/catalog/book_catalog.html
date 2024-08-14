@@ -15,7 +15,7 @@
             <strong>Жанр:</strong> {{ book.genre }}
             {% if user.librarian.employee_number %}
                 <a href="{% url 'debtors_list' %}" class="btn btn-secondary btn-sm">Список должников</a>
-            {% else %}
+            {% elif user.reader %}
                 <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary btn-sm">Взять книгу</a>
             {% endif %}
             

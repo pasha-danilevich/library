@@ -7,12 +7,12 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password']
+        fields = ['username', 'email', 'password']
 
 class ReaderRegistrationForm(forms.ModelForm):
     class Meta:
         model = Reader
-        fields = ['address']
+        fields = ['first_name', 'last_name', 'address']
 
 
 class LibrarianRegistrationForm(forms.ModelForm):
