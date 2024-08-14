@@ -6,14 +6,10 @@ from catalog.models import Author, Genre, Book
 class Command(BaseCommand):
     help = 'Generate random data for Author, Genre and Book models'
 
-    def add_arguments(self, parser):
-        parser.add_argument('--number_of_iterations', type=int, help='Number of iterations')
-
     def handle(self, *args, **kwargs):
         fake = Faker()
-        number_of_iterations = kwargs['number_of_iterations']
 
-        for _ in range(number_of_iterations):
+        for _ in range(10):
             # Создание случайных авторов
             author = Author.objects.create(name=fake.name())
             
