@@ -1,7 +1,11 @@
-from datetime import date
 import requests
+from datetime import date
+
+from django.urls import reverse
 from django.views import View
 from django.shortcuts import render, redirect
+from django.contrib.sites.shortcuts import get_current_site
+
 from auth_app.utils import get_access_token, get_user_from_token
 from .models import Book, BorrowedBook
 
@@ -9,13 +13,16 @@ from .models import Book, BorrowedBook
 class BaseView(View):
 
     def get_response(self, url: str, access_token):
-
         headers = {
             'Authorization': f'Bearer {access_token}'} if access_token else {}
-
         response = requests.get(url, headers=headers)
 
         return response
+
+    def get_full_url(self, uri: str) -> str:
+        host = get_current_site(self.request).domain
+        full_url = f'http://{host}{uri}'
+        return full_url
 
 
 class BookCatalogView(BaseView):
@@ -23,9 +30,10 @@ class BookCatalogView(BaseView):
     def get(self, request):
         access_token = get_access_token(request)
         user = get_user_from_token(access_token)
+        uri = reverse('book-list')
 
         response = self.get_response(
-            url='http://localhost:8000/api/books/',
+            url=self.get_full_url(uri),
             access_token=access_token
         )
 
@@ -37,7 +45,6 @@ class BookCatalogView(BaseView):
 
 
 class MyBookCatalogView(BaseView):
-    
 
     def calculate_days_on_hand(self, books):
         today = date.today()
@@ -51,7 +58,7 @@ class MyBookCatalogView(BaseView):
                 borrow_date = None
 
             if borrow_date:
-                days_on_hand = (today - borrow_date).days  
+                days_on_hand = (today - borrow_date).days
             else:
                 days_on_hand = 0
 
@@ -60,61 +67,63 @@ class MyBookCatalogView(BaseView):
                 'borrow_date': borrow_date,
                 'days_on_hand': days_on_hand
             })
-        
+
         return books_with_days
 
     def get(self, request):
         access_token = get_access_token(request)
         user = get_user_from_token(access_token)
+        uri = reverse('my-book-list')
 
         response = self.get_response(
-            url='http://localhost:8000/api/books/my/',
+            url=self.get_full_url(uri),
             access_token=access_token
         )
 
         if response.status_code == 200:
             books = response.json()
-            print(books)
-            books_with_days = self.calculate_days_on_hand(books)             
-            print(books_with_days)
+
+            books_with_days = self.calculate_days_on_hand(books)
+
             return render(
-                request, 
-                'catalog/my_books.html', 
+                request,
+                'catalog/my_books.html',
                 {'books_with_days': books_with_days, 'user': user}
             )
-        
+
         elif response.status_code == 401:
             return render(request, 'catalog/book_catalog.html', {'message': 'Вы не зарегестрированы', 'user': user})
 
 
 class DebtorsView(MyBookCatalogView):
-    
 
     def get(self, request):
         access_token = get_access_token(self.request)
         user = get_user_from_token(access_token)
+        uri = reverse('debtors-list')
 
         response = self.get_response(
-            url='http://localhost:8000/api/books/debtors/',
+            url=self.get_full_url(uri),
             access_token=access_token
         )
+
         data = response.json()
 
-         
         context = {'debtors': data, 'user': user}
-        print(context)
+
         return render(
-            request, 
-            'catalog/debtors_list.html', 
+            request,
+            'catalog/debtors_list.html',
             context=context
         )
+
 
 def borrow_book(request, book_id):
     book = Book.objects.get(id=book_id)
 
     access_token = get_access_token(request)
     user = get_user_from_token(access_token)
-    print(user.reader.id, 'borrow_book1111111111111111111')
+
     borrowed_book = BorrowedBook.objects.create(
         reader=user.reader,
         book=book
@@ -122,18 +131,16 @@ def borrow_book(request, book_id):
 
     return redirect('my_books')
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Book
 
 def return_book(request, book_id):
     access_token = get_access_token(request)
     user = get_user_from_token(access_token)
-    
+
     borrowed_book = BorrowedBook.objects.filter(
-        book_id=book_id, 
+        book_id=book_id,
         reader=user.reader.id
     )
-    
+
     borrowed_book.delete()
-    
+
     return redirect('my_books')
