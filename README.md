@@ -9,7 +9,7 @@ git clone https://github.com/pasha-danilevich/library.git
 python -m venv env
 env/Scripts/activate
 python -m pip install --upgrade pip
-cd src
+cd library/src
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
