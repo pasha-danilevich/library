@@ -7,7 +7,7 @@
 ```shell
 git clone https://github.com/pasha-danilevich/library.git
 python -m venv env
-venv/Scripts/activate
+env/Scripts/activate
 python -m pip install --upgrade pip
 cd src
 pip install -r requirements.txt
